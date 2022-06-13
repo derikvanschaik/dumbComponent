@@ -2,21 +2,15 @@ import { component } from "./due.js";
 
 const parent = document.querySelector("#root")
 const template = `
-        <h1>number of elements: let(elementCount)</h1>
-        <button click="addElement">Add element</button>
-        <ul>
-            <li foreach="e in arr" >let(e)</li>
-        </ul>
+        <h1>let(message)</h1>
+        <input input="setMessage" />
         `
 const data = {
-    elementCount: 0,
-    arr: [],
-    val: 'hey',
+    message: ''
 }
 const methods = {
-    addElement: function(){
-        data.arr.push(data.val)
-        data.elementCount++
+    setMessage: function(e){
+        data.message = e.target.value;
     }
 }
 const dueApp = new component(parent, template,data, methods)
