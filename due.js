@@ -115,8 +115,7 @@ function component(parent, template, data, methods){
         // this is how we listen for changes that aren't in traditional event listeners
         // for example in a setTimeout call that modifies data
         document.addEventListener("data-change", function(e){
-                // update all dom element textcontent
-                console.log(e.detail) 
+            
                 e.detail.forEach(dataKey =>{
                     dataToNodesMapper[dataKey].forEach(node =>{
                     if(node.tagName.toLowerCase() === "input"){
