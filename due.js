@@ -18,7 +18,7 @@ function component(parent, template, data, methods){
                 // it will initially render the textcontent as <h1>my count is 0</h1>
                 // but later on when we add the events and this count variable is changed 
                 // it will simply render the count variable and not the accompanying text
-                if(child.textContent.length > 0){
+                if(child.textContent.length > 0 && child.children.length === 0){
                     Object.keys(data).forEach(key =>{  
                         const idx = child.textContent.indexOf("let("+ key+ ")")
                         if(idx !== -1){
@@ -112,7 +112,30 @@ function component(parent, template, data, methods){
     return () => {
         render()
         addEvents(parent)
+        // this is how we listen for changes that aren't in traditional event listeners
+        // for example in a setTimeout call that modifies data
+        document.addEventListener("data-change", function(e){
+                // update all dom element textcontent
+                console.log(e.detail) 
+                e.detail.forEach(dataKey =>{
+                    dataToNodesMapper[dataKey].forEach(node =>{
+                    if(node.tagName.toLowerCase() === "input"){
+                        node.value = data[dataKey];
+                    }else{
+                        node.textContent = data[dataKey];
+                    }
+                })
+                })
+            // reassign data 
+            Object.assign(dataBefore, data)
+            
+        })
+
     }
 }
-export {component}
+function dispatch(dataVars){
+    document.dispatchEvent(new CustomEvent("data-change", {detail: dataVars}))
+}
+
+export {component, dispatch }
 
